@@ -1,0 +1,74 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.AI;
+
+public class Car : MonoBehaviour
+{
+    public float carSpeed;
+    public Transform target;
+    int nextTarget; // 목적지 순서
+
+    private void Start()
+    {
+        target = GameManager.instance.target[nextTarget];
+
+        GetComponent<NavMeshAgent>().speed = carSpeed; // AI가 움직일 스피드를 car 스피드와 일치시킬거임
+        StartCoroutine("AI_Move"); // 시작시 실행
+        StartCoroutine("AI_Animation");
+    }
+    
+    //카트들이 스스로 레이싱하게 만들어 줌
+    IEnumerator AI_Move() // AI 코르틴?
+    {
+        GetComponent<NavMeshAgent>().
+           SetDestination(target.position); // 목적지로 AI 출발시킬거임, 목적지는 traget의 position
+        
+        while (true)
+        {
+            float dis = (target.position - transform.position).magnitude;
+
+            if(dis <=1)
+            {
+                nextTarget += 1;
+
+                if(nextTarget >= GameManager.instance.target.Length)
+                        nextTarget = 0;
+
+                target = GameManager.instance.target[nextTarget];
+                GetComponent<NavMeshAgent>().
+                    SetDestination(target.position); // 목적지로 AI 출발시킬거임, 목적지는 traget의 position
+            }
+
+            yield return null;
+        }
+    }
+
+    // 애니매이션을 재생시켜 줄 코르틴
+    IEnumerator AI_Animation()
+    {
+        Vector3 lastPosition;
+
+        while(true)
+        {
+            lastPosition = transform.position; // 카트의 위치 넣어줌
+            yield return new WaitForSecondsRealtime(0.03f);// 0.03초 후에 현재 포지션과 lastposition을 비교
+                
+            if ((lastPosition - transform.position).magnitude > 0)
+            {
+                Vector3 dir = transform.InverseTransformPoint(lastPosition);
+                if(dir.x >= -0.01f && dir.x <= 0.01f)
+                    GetComponent<Animator>().Play("Ani_Forward");
+                if (dir.x < -0.01f)
+                    GetComponent<Animator>().Play("Ani_Right");
+                if (dir.x > 0.01f)
+                    GetComponent<Animator>().Play("Ani_Left");
+            }
+            if ((lastPosition - transform.position).magnitude <= 0)
+                GetComponent<Animator>().Play("Ani_Idle");
+
+            yield return null;
+        }
+
+    }
+}
