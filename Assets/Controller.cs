@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Controller : MonoBehaviour, IPointerUpHandler,
-    IPointerDownHandler, IDragHandler
+public class Controller : MonoBehaviour
 {
-    public RectTransform pad;
-    public RectTransform stick;
     Vector3 playerRotate;
     Car player;
     Animator playerAni;
@@ -19,20 +16,6 @@ public class Controller : MonoBehaviour, IPointerUpHandler,
         player = GameManager.instance.player;
         playerAni = player.GetComponent<Animator>(); // 캐릭터에 애니매이션 되어있는거 받기
         StartCoroutine("PlayerMove");
-    }
-
-    public void OnDrag(PointerEventData eventData)
-    {
-        stick.position = eventData.position;
-        stick.localPosition =
-            Vector3.ClampMagnitude(eventData.position - (Vector2)pad.position, pad.rect.width * 0.5f);
-
-        playerRotate = new Vector3(0, stick.localPosition.x, 0).normalized;
-    }
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        stick.localPosition = Vector3.zero;
-        playerRotate = Vector3.zero;
     }
 
     // Accel버튼 누르고 있을 떄
@@ -47,41 +30,37 @@ public class Controller : MonoBehaviour, IPointerUpHandler,
         StartCoroutine("Braking");
     }
 
-    IEnumerator PlayerMove()  // 스틱 조종, 변경바람
+    IEnumerator PlayerMove()  // 변경바람
     {
-        while(true)
+        while (true)
         {
             if (onMove)
             {
-                player.transform.Translate(Vector3.forward * playerSpeed
-                    * Time.deltaTime);
-                if (Mathf.Abs(stick.localPosition.x) > pad.rect.width * 0.2f) // 스틱이 움직였을 때
-                    player.transform.Rotate(playerRotate * 30 * Time.deltaTime); // 플레이어 회전시킴
-
-                // 애니매이션 재생
-                if (Mathf.Abs(stick.localPosition.x) <= pad.rect.width * 0.2f)
-                    playerAni.Play("Ani_Forward");
-                if (stick.localPosition.x > pad.rect.width * 0.2f)
-                    playerAni.Play("Ani_Right");
-                if (stick.localPosition.x < pad.rect.width * -0.2f)
-                    playerAni.Play("Ani_Left");
+                player.transform.Translate(Vector3.forward * playerSpeed * Time.deltaTime);
+                //if (Mathf.Abs(stick.localPosition.x) > pad.rect.width * 0.2f) // 스틱이 움직였을 때
+                //    player.transform.Rotate(playerRotate * 30 * Time.deltaTime); // 플레이어 회전시킴
 
                 player.transform.GetChild(3).gameObject.SetActive(true);
                 player.transform.GetChild(4).gameObject.SetActive(false);
             }
             if (!onMove)
             {
-                playerAni.Play("Ani_Idle");
+                
                 player.transform.GetChild(3).gameObject.SetActive(false);
                 player.transform.GetChild(4).gameObject.SetActive(true);
             }
             yield return null;
         }
     }
+
+
+
+
     IEnumerator Acceleration()
     {
         StopCoroutine("Braking"); // 엑셀기능 실행될 때는 감속기능 멈춰야 함
 
+        
         while (true)
         {
             playerSpeed += 7 * Time.deltaTime;
@@ -114,19 +93,46 @@ public class Controller : MonoBehaviour, IPointerUpHandler,
         }
     }
 
-    
 
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        
-    }
+
 
     private void Update() // Accel, leftshift키
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        // 전진
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
             OnMove();
-        if (Input.GetKeyUp(KeyCode.LeftShift))
+            playerAni.Play("Ani_Forward");
+            
+        }
+        // 정지 
+        if (Input.GetKeyUp(KeyCode.UpArrow))
+        {
             OffMove();
+            playerAni.Play("Ani_Idle");
+        }
+            
+        // 후진
+        if (Input.GetKey(KeyCode.DownArrow) == true)
+        {
+
+            player.transform.Translate(-Vector3.forward * playerSpeed * 0);
+        }
+        //좌우
+        if (Input.GetKey(KeyCode.LeftArrow) == true)
+        {
+            
+            playerAni.Play("Ani_Left"); // 애니매이션 재생
+            player.transform.Rotate(Vector3.down * 30 * Time.deltaTime);
+        }
+
+        if (Input.GetKey(KeyCode.RightArrow) == true)
+        {
+            playerAni.Play("Ani_Right");
+            player.transform.Rotate(Vector3.up * 30 * Time.deltaTime);
+        }
+      
+
     }
     
 }
