@@ -18,6 +18,10 @@ public class GameManager : MonoBehaviour
     public Car[] car; // 카트들을 담을 자리
     public Transform[] target; // 목적지들을 담을 배열
 
+    [Header("Menu")]
+    public GameObject startMenu;
+    public GameObject selectMenu;
+
     //싱글톤 패턴, 이렇게 하면 다른 곳에서 쉽게 이것을 쓸 수 있음
     private void Awake()
     {
@@ -35,6 +39,12 @@ public class GameManager : MonoBehaviour
         {
             car[i].carSpeed = Random.Range(baseSpeed, baseSpeed + 0.5f); // 0.5이상 차이 안나게
         }
+    }
+
+    public void StartBtn()
+    {
+        startMenu.SetActive(false);
+        selectMenu.SetActive(true);
     }
 
 
