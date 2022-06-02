@@ -30,7 +30,7 @@ public class Controller : MonoBehaviour
         StartCoroutine("Braking");
     }
 
-    IEnumerator PlayerMove()  // 변경바람
+    IEnumerator PlayerMove() 
     {
         while (true)
         {
@@ -96,7 +96,7 @@ public class Controller : MonoBehaviour
 
 
 
-    private void Update() // Accel, leftshift키
+    private void Update() // 방향키
     {
         // 전진
         if (Input.GetKeyDown(KeyCode.UpArrow))
@@ -115,7 +115,6 @@ public class Controller : MonoBehaviour
         // 후진
         if (Input.GetKey(KeyCode.DownArrow) == true)
         {
-
             player.transform.Translate(-Vector3.forward * playerSpeed * 0);
         }
         //좌우
