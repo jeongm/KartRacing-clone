@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Controller : MonoBehaviour
+public class Controller : MonoBehaviour, IPointerDownHandler
 {
     Vector3 playerRotate;
     Car player;
@@ -11,7 +11,7 @@ public class Controller : MonoBehaviour
     bool onMove; // 이동중인지 확인
     float playerSpeed;
 
-    private void Start()
+    public void StartController()
     {
         player = GameManager.instance.player;
         playerAni = player.GetComponent<Animator>(); // 캐릭터에 애니매이션 되어있는거 받기
@@ -133,5 +133,9 @@ public class Controller : MonoBehaviour
       
 
     }
-    
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        
+    }
 }

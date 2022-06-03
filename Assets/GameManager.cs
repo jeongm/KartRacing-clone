@@ -30,8 +30,14 @@ public class GameManager : MonoBehaviour
             instance = this;
         }
         SpeedSet(); // 시작할 때 이 기능도 함께 실행시킴
+        
+    }
+
+    public void GameStart()
+    {
         player.player = true; // 플레이어 설정
     }
+
     // 속도를 랜덤으로 부여하는 기능
     void SpeedSet()
     {

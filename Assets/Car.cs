@@ -10,7 +10,7 @@ public class Car : MonoBehaviour
     int nextTarget; // 목적지 순서
     public bool player; // 카트가 플레이어인지 체크
 
-    private void Start()
+    public void StartAt()
     {
         // 지금까지 만든 기능이 플레이어가 아닐 때 실행되도록
         if(!player)
