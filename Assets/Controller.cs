@@ -34,6 +34,9 @@ public class Controller : MonoBehaviour, IPointerDownHandler
     {
         while (true)
         {
+            GameManager.instance.curSpeedText.text = 
+                string.Format("{0:000.00}", playerSpeed * 10);
+
             if (onMove)
             {
                 player.transform.Translate(Vector3.forward * playerSpeed * Time.deltaTime);

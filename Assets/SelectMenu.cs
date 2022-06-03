@@ -13,17 +13,26 @@ public class SelectMenu : MonoBehaviour, IPointerDownHandler
     {
         if(!checking)
         {
+            SE_Manager.instance.PlaySound(SE_Manager.instance.btn);
+
             Ray ray = cam.ScreenPointToRay(eventData.position);
             Physics.Raycast(ray, out hit);
 
-            if(hit.transform.gameObject.tag == "Car")
+            if(hit.transform != null)
             {
-                checking = true;
-                cam.transform.SetParent(hit.transform);
-                StopCoroutine("Cam_ZoomOut");
-                StartCoroutine("Cam_ZoomIn");
-                finalCheckMenu.SetActive(true);
+                if (hit.transform.gameObject.tag == "Car")
+                {
+                    checking = true;
+                    cam.transform.SetParent(hit.transform);
+                    StopCoroutine("Cam_ZoomOut");
+                    StartCoroutine("Cam_ZoomIn");
+                    finalCheckMenu.SetActive(true);
+
+                    GameManager.instance.player = hit.transform.
+                        GetComponent<Car>();
+                }
             }
+            
         }
     }
 
@@ -43,6 +52,8 @@ public class SelectMenu : MonoBehaviour, IPointerDownHandler
 
     public void CancleBtn()
     {
+        SE_Manager.instance.PlaySound(SE_Manager.instance.btn);
+
         StopCoroutine("Cam_ZoomIn");
         StartCoroutine("Cam_ZoomOut");
         finalCheckMenu.SetActive(false);

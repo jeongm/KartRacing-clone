@@ -20,5 +20,9 @@ public class SE_Manager : MonoBehaviour
 
         sound = GetComponent<AudioSource>();
     }
-
+    public void PlaySound(AudioClip clip)
+    {
+        sound.PlayOneShot(clip);
+    }
+    
 }

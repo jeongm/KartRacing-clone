@@ -10,7 +10,7 @@ public class Car : MonoBehaviour
     int nextTarget; // 목적지 순서
     public bool player; // 카트가 플레이어인지 체크
 
-    public void StartAt()
+    public void StartAI()
     {
         // 지금까지 만든 기능이 플레이어가 아닐 때 실행되도록
         if(!player)
@@ -28,7 +28,7 @@ public class Car : MonoBehaviour
     IEnumerator AI_Move() // AI 코르틴?
     {
         GetComponent<NavMeshAgent>().
-           SetDestination(target.position); // 목적지로 AI 출발시킬거임, 목적지는 traget의 position
+            SetDestination(target.position); // 목적지로 AI 출발시킬거임, 목적지는 traget의 position
         
         while (true)
         {
@@ -76,5 +76,31 @@ public class Car : MonoBehaviour
             yield return null;
         }
 
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(player)
+        {
+            if(other.gameObject.tag=="Finish")
+            {
+                if(GameManager.instance.check)
+                {
+                    GameManager.instance.check = false;
+
+                    if (GameManager.instance.lap > 0)
+                    { // 한 바퀴 돌 때마다 작동 
+                        SE_Manager.instance.PlaySound(SE_Manager.instance.lap);
+                        GameManager.instance.LapTime();
+                    }
+                    GameManager.instance.lap += 1;
+                }
+                
+            }
+            if(other.gameObject.tag == "CheckPoint")
+            {
+                GameManager.instance.check = true;
+            }
+        }
     }
 }
