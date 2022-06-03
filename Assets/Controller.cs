@@ -59,8 +59,7 @@ public class Controller : MonoBehaviour, IPointerDownHandler
                 player.transform.GetChild(4).gameObject.SetActive(true);
             }
 
-            minimapCam.position = player.transform.position +
-                new Vector3(0,80,0); // 미니맵 카메라는 간격을 두고(0,80,0) 플레이이어 따라다님
+            minimapCam.position = player.transform.position + new Vector3(0,80,0); // 미니맵 카메라는 간격을 두고(0,80,0) 플레이이어 따라다님
             yield return null;
         }
     }

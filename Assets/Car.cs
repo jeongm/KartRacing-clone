@@ -78,7 +78,7 @@ public class Car : MonoBehaviour
 
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other) // 콜라이더 충돌감지함수
     {
         if(player)
         {
@@ -86,7 +86,7 @@ public class Car : MonoBehaviour
             {
                 if(GameManager.instance.check)
                 {
-                    GameManager.instance.check = false;
+                    GameManager.instance.check = false; //골라인을 통과하면
 
                     if (GameManager.instance.lap > 0)
                     { // 한 바퀴 돌 때마다 작동 

@@ -68,14 +68,14 @@ public class GameManager : MonoBehaviour
 
     public void LapTime()
     {
-        if(lap == 3)
+        if(lap == 3) // 마지막 바퀴면
         {
             SE_Manager.instance.PlaySound(SE_Manager.instance.goal);
             cam.parent = null; // 카트안에서 카메라 꺼냄, 더이상 카트 안따라가게
             StopCoroutine("Timer");// 타이머도 정지시킴
             finishMenu.SetActive(true);
 
-            player.player = false;
+            player.player = false; // 조종하던 카트는 더이상 player가 아니게
             player.StartAI();
             player.transform.GetChild(3).gameObject.SetActive(false); // 재생중이던 사운드도 다 꺼줌
 
@@ -167,7 +167,7 @@ public class GameManager : MonoBehaviour
     //재시작 버튼, 현재 씬을 다시 로드하는 방법을 사용
     public void ReStart()
     {
-        SE_Manager.instance.PlaySound(SE_Manager.instance.btn);
+        SE_Manager.instance.PlaySound(SE_Manager.instance.btn); //버튼음 재생
         SceneManager.LoadScene("SampleScene");
     }
 }
