@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -163,5 +164,10 @@ public class GameManager : MonoBehaviour
         selectMenu.SetActive(true);
     }
 
-
+    //재시작 버튼, 현재 씬을 다시 로드하는 방법을 사용
+    public void ReStart()
+    {
+        SE_Manager.instance.PlaySound(SE_Manager.instance.btn);
+        SceneManager.LoadScene("SampleScene");
+    }
 }

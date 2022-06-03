@@ -11,6 +11,11 @@ public class Controller : MonoBehaviour, IPointerDownHandler
     bool onMove; // 이동중인지 확인
     float playerSpeed;
 
+    [Header("MiniMap")]
+    public GameObject minimap;
+    public Transform minimapCam;
+
+
     public void StartController()
     {
         player = GameManager.instance.player;
@@ -32,6 +37,7 @@ public class Controller : MonoBehaviour, IPointerDownHandler
 
     IEnumerator PlayerMove() 
     {
+        minimap.SetActive(true);
         while (true)
         {
             GameManager.instance.curSpeedText.text = 
@@ -52,6 +58,9 @@ public class Controller : MonoBehaviour, IPointerDownHandler
                 player.transform.GetChild(3).gameObject.SetActive(false);
                 player.transform.GetChild(4).gameObject.SetActive(true);
             }
+
+            minimapCam.position = player.transform.position +
+                new Vector3(0,80,0); // 미니맵 카메라는 간격을 두고(0,80,0) 플레이이어 따라다님
             yield return null;
         }
     }
@@ -115,11 +124,11 @@ public class Controller : MonoBehaviour, IPointerDownHandler
             playerAni.Play("Ani_Idle");
         }
             
-        // 후진
-        if (Input.GetKey(KeyCode.DownArrow) == true)
+        // 후진 - 안만듬
+        /*if (Input.GetKey(KeyCode.DownArrow) == true)
         {
             player.transform.Translate(-Vector3.forward * playerSpeed * 0);
-        }
+        }*/
         //좌우
         if (Input.GetKey(KeyCode.LeftArrow) == true)
         {
